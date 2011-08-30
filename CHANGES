@@ -1,0 +1,31 @@
+WHATS NEW IN 1.0.3
+
+* actually seems to be working right, unlike 1.0.1 and 1.0.2, which were both
+  buggy as hell under many (most?) conditions. If 1.0.1 and 1.0.2 locked up, 
+  went berzerk, or did other strange and horrible things when you used them,
+  try 1.0.3.
+* dc-tool should now be able to recover from dropped packets in nearly all
+  cases (prior versions would just get stuck if certain packets got dropped)
+* gethostinfo syscall now returns the dreamcast's ip, in addition to the ip
+  and port of the dc-tool host
+* dcload-ip now reports "link change..." on the status line while the rtl8139
+  is negotiating. This message should be displayed momentarily when dcload-ip
+  starts, when you execute dc-tool -r, or if you disconnect and reconnect the
+  ethernet cable. If the message stays there, check your ethernet cable.
+
+WHATS NEW IN 1.0.2
+
+* fixed bug where rx configuration was not restored properly
+  (only affected dcload syscalls - could cause dc-tool to segfault apparently,
+   and who knows what else...)
+
+WHATS NEW IN 1.0.1
+
+* works with 100mbit now
+* added syscall to return the ip and port of the dc-tool host
+* added O_BINARY to all open()s in dc-tool to help cygwin users
+
+WHATS NEW IN 1.0.0
+
+* initial release of dcload-ip
+
