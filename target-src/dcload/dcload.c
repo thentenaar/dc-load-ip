@@ -29,6 +29,7 @@
 #include "rtl8139.h"
 #include "net.h"
 #include "cdfs.h"
+#include "maple.h"
 
 #define NAME "dcload-ip 1.0.3"
 
@@ -212,6 +213,8 @@ int main(void)
 
     cdfs_redir_save(); /* will only save value once */
     cdfs_redir_disable();
+
+    maple_init();
 
     if (!booted) {
 	disp_info();

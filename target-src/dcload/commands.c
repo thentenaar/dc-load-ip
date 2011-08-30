@@ -9,6 +9,7 @@
 #include "go.h"
 #include "disable.h"
 #include "scif.h"
+#include "maple.h"
 
 unsigned int our_ip;
 unsigned int tool_ip;
@@ -195,7 +196,7 @@ void cmd_version(ip_header_t * ip, udp_header_t * udp, command_t * command)
 
     i = strlen("DCLOAD-IP 1.0.3") + 1;
     memcpy(response, command, COMMAND_LEN);
-    strcpy(response->data, "DCLOAD-IP 1.0.3");
+    memcpy(response->data, "DCLOAD-IP 1.0.3", i);
     make_ip(ntohl(ip->src), ntohl(ip->dest), UDP_H_LEN + COMMAND_LEN + i, 17, (ip_header_t *)(pkt_buf + ETHER_H_LEN));
     make_udp(ntohs(udp->src), ntohs(udp->dest),(unsigned char *) response, COMMAND_LEN + i, (ip_header_t *)(pkt_buf + ETHER_H_LEN), (udp_header_t *)(pkt_buf + ETHER_H_LEN + IP_H_LEN));
     bb_tx(pkt_buf, ETHER_H_LEN + IP_H_LEN + UDP_H_LEN + COMMAND_LEN + i);
@@ -213,4 +214,18 @@ void cmd_retval(ip_header_t * ip, udp_header_t * udp, command_t * command)
 	syscall_retval = ntohl(command->address);
 	escape_loop = 1;
     }
+}
+
+void cmd_maple(ip_header_t * ip, udp_header_t * udp, command_t * command) {
+    /* Send Maple packet and wait for response */
+    char *res; char *buf = (char *)(udp->data+4); int i;
+    clear_lines(96, 24, 0); draw_string(0, 96, "sending maple cmd...", 0xffff);
+    do res = maple_docmd(buf[0],buf[1],buf[2],buf[3],buf[4],buf+5); while (*res == MAPLE_RESPONSE_AGAIN);
+
+    /* Send response back over socket */
+    clear_lines(96, 24, 0); draw_string(0, 96, "sending maple response...", 0xffff);
+    make_ip(ntohl(ip->src), ntohl(ip->dest), UDP_H_LEN + ((res[0] < 0) ? 4 : (res[3]+1)<<2), 17, (ip_header_t *)(pkt_buf + ETHER_H_LEN));
+    make_udp(ntohs(udp->src), ntohs(udp->dest),(unsigned char *)res, ((res[0] < 0) ? 4 : (res[3]+1)<<2), (ip_header_t *)(pkt_buf + ETHER_H_LEN), (udp_header_t *)(pkt_buf + ETHER_H_LEN + IP_H_LEN));
+    bb_tx(pkt_buf, ETHER_H_LEN + IP_H_LEN + UDP_H_LEN + ((res[0] < 0) ? 4 : (res[3]+1)<<2));
+    clear_lines(96, 24, 0); draw_string(0, 96, "idle...", 0xffff);
 }

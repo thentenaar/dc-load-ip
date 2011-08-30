@@ -22,11 +22,11 @@ typedef struct {
   unsigned short st_gid;
   unsigned short st_rdev;
   long st_size;
-  long st_atime;
+  long st_atim;
   long st_spare1;
-  long st_mtime;
+  long st_mtim;
   long st_spare2;
-  long st_ctime;
+  long st_ctim;
   long st_spare3;
   long st_blksize;
   long st_blocks;

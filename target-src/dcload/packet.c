@@ -38,7 +38,7 @@ void make_ip(int dest, int src, int length, char protocol, ip_header_t *ip)
     ip->checksum = checksum((unsigned short *)ip, sizeof(ip_header_t)/2);
 }
 
-unsigned char crap[1514];
+unsigned char crap[2048];
 
 void make_udp(unsigned short dest, unsigned short src, unsigned char * data, int length, ip_header_t *ip, udp_header_t *udp)
 {

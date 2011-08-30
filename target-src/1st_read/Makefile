@@ -1,7 +1,7 @@
 include ../../Makefile.cfg
 
 CC	= $(TARGETCC)
-CFLAGS	= $(TARGETCFLAGS)
+CFLAGS	= $(TARGETCFLAGS) -fno-builtin
 INCLUDE = -I../../target-inc
 OBJCOPY	= $(TARGETOBJCOPY)
 
