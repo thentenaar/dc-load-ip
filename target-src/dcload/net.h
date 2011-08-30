@@ -7,7 +7,7 @@ void process_udp(ether_header_t *ether, ip_header_t *ip, udp_header_t *udp);
 void process_mine(unsigned char *pkt, int len);
 void process_pkt(unsigned char *pkt, int len);
 
-extern unsigned char pkt_buf[1514];
+extern unsigned char pkt_buf[2048];
 
 extern unsigned int our_ip;
 

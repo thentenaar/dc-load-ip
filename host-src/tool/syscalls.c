@@ -73,9 +73,14 @@ void dc_fstat(unsigned char * buffer)
     dcstat.st_size = dc_order(filestat.st_size);
     dcstat.st_blksize = dc_order(filestat.st_blksize);
     dcstat.st_blocks = dc_order(filestat.st_blocks);
-    dcstat.st_atime = dc_order(filestat.st_atime);
-    dcstat.st_mtime = dc_order(filestat.st_mtime);
-    dcstat.st_ctime = dc_order(filestat.st_ctime);
+#if 0
+    /** ??? 
+     * error: request for member ‘tv_sec’ in something not a structure or union
+     */
+    dcstat.st_atim = dc_order(filestat.st_atime);
+    dcstat.st_mtim = dc_order(filestat.st_mtime);
+    dcstat.st_ctim = dc_order(filestat.st_ctime);
+#endif
 
     send_data((unsigned char *)&dcstat, ntohl(command->value1), ntohl(command->value2));
 
@@ -254,9 +259,15 @@ void dc_stat(unsigned char * buffer)
     dcstat.st_size = dc_order(filestat.st_size);
     dcstat.st_blksize = dc_order(filestat.st_blksize);
     dcstat.st_blocks = dc_order(filestat.st_blocks);
+
+#if 0
+    /**
+     * error: request for member ‘tv_sec’ in something not a structure or union
+     */
     dcstat.st_atime = dc_order(filestat.st_atime);
     dcstat.st_mtime = dc_order(filestat.st_mtime);
     dcstat.st_ctime = dc_order(filestat.st_ctime);
+#endif
 
     send_data((unsigned char *)&dcstat, ntohl(command->value0), ntohl(command->value1));
 

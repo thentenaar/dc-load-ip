@@ -1,12 +1,12 @@
 include ../../Makefile.cfg
 
 CC	= $(TARGETCC)
-CFLAGS	= $(TARGETCFLAGS) -DDREAMCAST_IP=\"$(DREAMCAST_IP)\"
+CFLAGS	= $(TARGETCFLAGS) -fno-builtin -DDREAMCAST_IP=\"$(DREAMCAST_IP)\"
 INCLUDE	= -I../../target-inc
 
 OBJCOPY	= $(TARGETOBJCOPY)
 
-DCLOBJECTS	= dcload-crt0.o syscalls.o memcpy.o memset.o memcmp.o disable.o go.o video.o dcload.o cdfs_redir.o cdfs_syscalls.o bswap.o packet.o rtl8139.o net.o commands.o
+DCLOBJECTS	= dcload-crt0.o syscalls.o memcpy.o memset.o memcmp.o disable.o go.o video.o dcload.o cdfs_redir.o cdfs_syscalls.o bswap.o packet.o rtl8139.o net.o commands.o maple.o
 #DCLOBJECTS	= dcload-crt0.o syscalls.o memcpy.o memset.o memcmp.o scif.o disable.o go.o video.o dcload.o cdfs_redir.o cdfs_syscalls.o bswap.o packet.o rtl8139.o net.o commands.o
 EXCOBJECTS	= exception.o
 
@@ -17,7 +17,7 @@ EXCOBJECTS	= exception.o
 %.o : %.S
 	$(CC) $(CFLAGS) $(INCLUDE) -o $@ -c $< 
 %.bin: %
-	$(OBJCOPY) -O binary $<$(EXECUTABLEEXTENSION) $@    
+	$(OBJCOPY) -O binary -R .stack $<$(EXECUTABLEEXTENSION) $@    
 
 all: dcload.bin exception.bin
 
@@ -25,7 +25,7 @@ dcload: $(DCLOBJECTS)
 	$(CC) -ml -m4 -Wl,-Tdcload.x -nostartfiles -nostdlib $^ -o $@ -lgcc
 
 exception: $(EXCOBJECTS)
-	$(CC) -ml -m4 -Wl,-Ttext=0x8c00f400 -nostartfiles -nostdlib $^ -o $@
+	$(CC) -ml -m4 -Wl,-T./ldscripts/shlelf.xc -Wl,-Ttext=0x8c00f400 -nostartfiles -nostdlib $^ -o $@
 
 .PHONY : clean
 clean:

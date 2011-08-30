@@ -45,7 +45,7 @@ void process_broadcast(unsigned char *pkt, int len)
     }
 }
 
-unsigned char pkt_buf[1514];
+unsigned char pkt_buf[2048];
 
 void process_icmp(ether_header_t *ether, ip_header_t *ip, icmp_header_t *icmp)
 {
@@ -162,6 +162,10 @@ void process_udp(ether_header_t *ether, ip_header_t *ip, udp_header_t *udp)
 
   if (!memcmp(command->id, CMD_REBOOT, 4)) {
       cmd_reboot(ip, udp, command);
+  }
+
+  if (!memcmp(command->id, CMD_MAPLE, 4)) {
+      cmd_maple(ip, udp, command);
   }
 }
 

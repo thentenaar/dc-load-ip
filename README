@@ -1,3 +1,54 @@
+This is dcload-ip 1.0.3 with various fixes/changes by Tim Hentenaar <tim@hentenaar.com>.
+
+You can find the latest version at: http://github.com/thentenaar/dc-load-ip
+
+Here is a brief list of changes from the original:
+
+	* Added some fixes to fix compiler errors/warnings
+	* Added maple passthrough functionality
+
+Makefile Changes
+
+	I've made various changes to the Makefiles according to my setup. 
+	For instance, it's assumed that the 'scramble' utility will be
+	in the 'make-cd' directory when making a CD image.
+
+	You'll want to review Makefile.cfg and edit it according to your
+	needs.
+
+Maple Passthrough
+
+	I've added a feature which I like to call 'Maple Passthrough.' 
+	Basically, this allows the portion of dcload-ip that runs on the
+	Dreamcast to act as a bridge between an application on the network
+	and the maple bus.
+
+	The way this works is fairly simple. You send a UDP datagram to 
+	port 31313, containing the following:
+
+	'MAPL' (4 byte command ID)
+	Port   (8-bit port number)
+	Slot   (8-bit slot number)
+	Cmd    (8-bit Maple command ID)
+	Last   (8-bit Maple last flag) [Ignored]
+	Length (8-bit Maple data length (in 32-bit words))
+	Data   (32-bit words: Length, [data]) specified if Length > 0
+
+	The response packet is as follows:
+	
+	Status (8-bit Maple status)
+	To     (8-bit Maple address)
+	From   (8-bit Maple address)
+	Length (8-bit Maple data length (in 32-bit words))
+	Data   (32-bit words)
+
+	*** See Maple.pm for a Perl module illustrating how to use this functionality. ***
+
+Note that this software isn't perfect, and that with all the changes to GCC over the years since the last revision to
+the original dcload-ip, some features (e.g. exception handling) may be a bit buggy or may not work at all.
+
+The following is the original README:
+
 dcload-ip 1.0.3 - a Dreamcast ethernet loader by <andrewk@napalm-x.com>
 
 Features
