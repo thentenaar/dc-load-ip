@@ -42,13 +42,13 @@ L<http://mc.pp.se/dc/maplebus.html>
 
 	use Maple;
 
-	my %cmd  = {
+	my %cmd  = (
 		'cmd'    => MAPLE_CMD_RESET,
 		'port'   => 0,
 		'slot'   => 1,
 		'last'   => 0,
 		'length' => 0
-	};
+	);
 
 	my $resp = send_maple_packet('127.0.0.1',\%cmd);
 
@@ -57,14 +57,14 @@ Dreamcast with the IP B<127.0.0.1>.
 
 	use Maple;
 
-	my %cmd  = {
+	my %cmd  = (
 		'cmd'    => MAPLE_CMD_GETMEMINFO,
 		'port'   => 0,
 		'slot'   => 1,
 		'last'   => 0,
 		'length' => 2,
 		'data'   => [ MAPLE_FUNC_MEMORY, 0 ]
-	};
+	);
 
 	my $resp = send_maple_packet('127.0.0.1',\%cmd);
 
